@@ -31,6 +31,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * class to show battery cell data
+ */
 @AndroidEntryPoint
 class CellDataFragment : BaseFragment<FragmentCellDataBinding>() {
 
@@ -126,7 +129,9 @@ class CellDataFragment : BaseFragment<FragmentCellDataBinding>() {
         })
     }
 
-
+    /**
+     * Add recyclerview Adapters
+     */
     private fun initCellAdapter() {
         adapterCell1 = RVAdapter(R.layout.holder_cell, BR.bean, object : RVAdapter.Callback<Item> {
             override fun onItemClick(v: View, m: Item) {
@@ -144,6 +149,9 @@ class CellDataFragment : BaseFragment<FragmentCellDataBinding>() {
         binding.rvCell2.adapter = adapterCell2
     }
 
+    /**
+     * add Temperature adapter
+     */
     private fun initTempAdapter() {
         adapterTemp = RVAdapter(R.layout.holder_temp, BR.bean, object : RVAdapter.Callback<Item> {
             override fun onItemClick(v: View, m: Item) {
@@ -154,14 +162,19 @@ class CellDataFragment : BaseFragment<FragmentCellDataBinding>() {
         binding.rvTemp.adapter = adapterTemp
     }
 
-
+    /**
+     * get Data from Arguments
+     */
     private fun initInput() {
         arguments?.let {
             bleDevice = it.getParcelable("device")
         }
     }
 
-
+    /**
+     *send cmd bytes to Bluetooth GATT
+     * command:String byte
+     */
     private fun sendCommand(command: String) {
         BleManager.getInstance().write(
             bleDevice,
@@ -188,6 +201,9 @@ class CellDataFragment : BaseFragment<FragmentCellDataBinding>() {
         )
     }
 
+    /**
+     * calculate data from byte array
+     */
     private fun processData() {
         lastData?.let {
             val tempList = arrayListOf<Item>()
@@ -221,5 +237,8 @@ class CellDataFragment : BaseFragment<FragmentCellDataBinding>() {
         super.onDestroy()
     }
 
+    /**
+     * data class to store values of byte array
+     */
     data class Item(val id: Int, val heading: String, val value: String, var type: Int)
 }

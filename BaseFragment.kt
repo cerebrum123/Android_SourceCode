@@ -17,6 +17,9 @@ import com.battery.cygni.presentation.common.hideKeyboard
 import com.battery.cygni.presentation.common.utilities.rxbus.EventBus
 import io.reactivex.android.schedulers.AndroidSchedulers
 
+/**
+ * base class for fragment
+ */
 abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
     val TAG: String = this.javaClass.simpleName
     lateinit var sharedPrefManager: SharedPrefManager
@@ -56,8 +59,19 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
         return binding.root
     }
 
+    /**
+     * get layout file id
+     */
     protected abstract fun getLayoutResource(): Int
+
+    /**
+     * get current view model
+     */
     protected abstract fun getViewModel(): BaseViewModel
+
+    /**
+     * onCreateView do your code in override method
+     */
     protected abstract fun onCreateView(view: View, saveInstanceState: Bundle?)
     open fun onPermissionsResult(
         requestCode: Int,
@@ -77,6 +91,9 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
         super.onDetach()
     }
 
+    /**
+     * register common event bus
+     */
     private fun registerEventBus(viewModel: BaseViewModel) {
         viewModel.compositeDisposable.add(
             EventBus.subscribe<Any>()

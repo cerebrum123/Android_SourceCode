@@ -21,11 +21,18 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+/**
+ * battery call data viewmodel
+ */
 @HiltViewModel
 class CellDataModel @Inject constructor(val baseRepo: BaseRepo,val cellDataDao: CellDataDao) :
     BaseViewModel() {
     val obrCommandBits: SingleLiveEvent<String> = SingleLiveEvent()
     val obrProgress: SingleLiveEvent<Boolean> = SingleLiveEvent()
+
+    /**
+     * process cmd array to bytes with egual interval and restart bytes again
+     */
     fun cellData() {
         var index = 0
         compositeDisposable.add(Observable.interval(300, 400, TimeUnit.MILLISECONDS)
@@ -53,6 +60,12 @@ class CellDataModel @Inject constructor(val baseRepo: BaseRepo,val cellDataDao: 
             })
     }
     val obrInsertRecord = SingleRequestEvent<Long>()
+
+    /**
+     * insert bytes record to Room database
+     * list:List<String>  record bytes
+     * mac:String mac address of bluetooth device
+     */
     fun insertRecord(list: List<String>?, mac: String) {
         list?.let { record ->
             val time = Calendar.getInstance().timeInMillis
